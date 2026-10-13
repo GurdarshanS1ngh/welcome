@@ -1,0 +1,582 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Little Surprise 💗</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+    margin: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Trebuchet MS", sans-serif;
+    color: #f5f5f5;
+    background:
+        radial-gradient(ellipse at top, #292929 0%, #111 48%, #050505 100%);
+    }
+
+    .card {
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: clamp(20px, 5vh, 48px) 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;
+    text-align: center;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    }
+
+    .content {
+    width: 100%;
+    height: 100%;
+    margin: 10vh;
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.25s, transform 0.25s;
+    }
+
+    .dots {
+    display: flex;
+    justify-content: center;
+    gap: 9px;
+    margin-top: 24px;
+    padding-bottom: 4px;
+    flex-shrink: 0;
+    }
+
+    .card.dark-cover {
+    background: radial-gradient(
+        circle at 50% 35%,
+        #292929 0%,
+        #151515 55%,
+        #080808 100%
+    );
+    border: none;
+    color: #e8e8e8;
+    box-shadow: none;
+    }
+
+
+    .envelope {
+    position: relative;
+    width: min(100%, 300px);
+    height: clamp(150px, 23vh, 190px);
+    flex-shrink: 0;
+    margin: 28px auto 20px;
+    background: linear-gradient(145deg, #292929, #101010);
+    border: 1px solid #505050;
+    border-radius: 5px;
+    box-shadow: 0 20px 35px #0008;
+    overflow: hidden;
+    }
+
+    .envelope::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        145deg,
+        transparent 49.5%,
+        #414141 50%,
+        #202020 50.8%,
+        transparent 51.5%
+    );
+    }
+
+    .envelope::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        35deg,
+        transparent 49.5%,
+        #383838 50%,
+        #171717 50.8%,
+        transparent 51.5%
+    );
+    }
+
+    .envelope-flap {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(160deg, #353535, #191919);
+    clip-path: polygon(0 0, 100% 0, 50% 65%);
+    border-bottom: 1px solid #555;
+    z-index: 2;
+    }
+
+    .envelope-seal {
+    position: absolute;
+    z-index: 3;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -10%);
+    width: 43px;
+    height: 43px;
+    display: grid;
+    place-items: center;
+    color: #e8e8e8;
+    background: radial-gradient(circle, #505050, #222);
+    border: 1px solid #777;
+    border-radius: 50%;
+    box-shadow: 0 3px 10px #0008;
+    font-size: 20px;
+    }
+
+    .card.dark-cover h1 {
+    color: #f5f5f5;
+    }
+
+    .card.dark-cover .eyebrow,
+    .card.dark-cover .hint {
+    color: #aaa;
+    }
+
+    .card.dark-cover .dot {
+    background: #484848;
+    }
+
+    .card.dark-cover .dot.active {
+    background: #eee;
+    }
+
+    .content.fade-out {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    .heart {
+      font-size: 34px;
+      margin-bottom: 10px;
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #c17ba0;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      font-family: Georgia, serif;
+      font-size: clamp(30px, 8vw, 42px);
+      line-height: 1.2;
+      margin: 0 0 18px;
+      color: #a64d79;
+    }
+
+    .message {
+      font-size: 16px;
+      line-height: 1.8;
+      margin: 0 auto 22px;
+      max-width: 330px;
+    }
+
+    .photos {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      margin: 24px auto;
+    }
+
+    .photos img {
+      width: 100%;
+      max-width: 175px;
+      height: 210px;
+      object-fit: cover;
+      border: 7px solid white;
+      border-radius: 8px;
+      box-shadow: 0 5px 18px #a64d7920;
+      transform: rotate(-3deg);
+    }
+
+    .photos img:nth-child(2) {
+      transform: rotate(4deg);
+    }
+
+    .hint {
+      margin-top: 26px;
+      color: #b47a99;
+      font-size: 13px;
+      animation: pulse 1.8s infinite;
+    }
+
+    .dot {
+      height: 8px;
+      width: 8px;
+      background: #ead0df;
+      border-radius: 50%;
+      transition: width 0.2s, background 0.2s;
+    }
+
+    .dot.active {
+      width: 23px;
+      border-radius: 8px;
+      background: #d57da7;
+    }
+
+    .restart {
+      display: inline-block;
+      margin-top: 6px;
+      padding: 12px 22px;
+      background: #f8dce9;
+      border-radius: 24px;
+      font-size: 14px;
+      color: #95466d;
+    }
+
+
+    .photos {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: start;
+    gap: 12px;
+    width: 100%;
+    max-width: 760px;
+    margin: 32px auto;
+    }
+
+    .photo-frame {
+    position: relative;
+    min-width: 0;
+    padding: 6px;
+    border-radius: 12px;
+    background: linear-gradient(145deg, #f5f5f5, #999);
+    box-shadow: 0 5px 18px #0009;
+    }
+
+    .photo-frame img {
+    display: block;
+    width: 100%;
+    height: clamp(150px, 25vw, 260px);
+    object-fit: cover;
+    border-radius: 7px;
+    background: #252525;
+    }
+
+    .photo-frame::before {
+    position: absolute;
+    z-index: 1;
+    top: -14px;
+    left: 12px;
+    content: "♡";
+    font-size: 24px;
+    color: #fff;
+    text-shadow: 0 1px 5px #000;
+    }
+
+    /* Photo 1: silver cat-ear frame */
+    .photo-frame-1 {
+    border-radius: 18px 18px 12px 12px;
+    background: linear-gradient(135deg, #fff, #8a8a8a, #eee);
+    }
+
+    .photo-frame-1::after {
+    content: " /\_/\\\\";
+    position: absolute;
+    top: -18px;
+    right: 8px;
+    color: #eee;
+    font-size: 20px;
+    white-space: pre;
+    }
+
+    /* Photo 2: white paw-print frame */
+    .photo-frame-2 {
+    background: #eee;
+    border: 2px dashed #777;
+    transform: rotate(2deg);
+    }
+
+    .photo-frame-2::before {
+    content: "🐾";
+    top: -17px;
+    left: 8px;
+    font-size: 23px;
+    text-shadow: none;
+    }
+
+    /* Photo 3: charcoal frame with silver stars */
+    .photo-frame-3 {
+    background: linear-gradient(135deg, #555, #181818);
+    border: 1px solid #777;
+    transform: rotate(-2deg);
+    }
+
+    .photo-frame-3::before {
+    content: "✦ ✧";
+    top: -15px;
+    left: auto;
+    right: 4px;
+    font-size: 20px;
+    color: #fff;
+    text-shadow: 0 0 8px #ccc;
+    }
+
+    @media (max-width: 380px) {
+    .photos {
+        gap: 14px 10px;
+    }
+
+    .photo-frame {
+        padding: 6px;
+    }
+
+    .photo-frame img {
+        height: 125px;
+    }
+    }
+
+    @keyframes pulse {
+      50% { opacity: 0.55; }
+    }
+
+
+    @media (max-width: 480px) {
+    .card {
+        padding: 24px 18px;
+    }
+
+    .heart {
+        font-size: 28px;
+        margin-bottom: 6px;
+    }
+
+    .eyebrow {
+        font-size: 10px;
+        margin-bottom: 10px;
+    }
+
+    h1 {
+        font-size: clamp(28px, 8vw, 38px);
+        margin-bottom: 12px;
+    }
+
+    .message {
+        font-size: 15px;
+        line-height: 1.65;
+        margin-bottom: 16px;
+    }
+
+    .photos {
+        gap: 10px;
+        margin: 18px auto;
+    }
+
+    .photos img {
+        width: 46%;
+        height: clamp(140px, 25vh, 200px);
+        padding: 0;
+        object-fit: cover;
+        border: 5px solid white;
+    }
+
+    .hint {
+        margin-top: 20px;
+    }
+
+    .dots {
+        margin-top: 18px;
+    }
+
+    .photos {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+        margin: 24px auto;
+    }
+
+    .photo-frame {
+        padding: 4px;
+    }
+
+    .photo-frame img {
+        height: clamp(120px, 35vw, 180px);
+    }
+    }
+
+    @media (max-height: 650px) {
+    .card {
+        padding-top: 16px;
+        padding-bottom: 16px;
+    }
+
+    .envelope {
+        height: 140px;
+        margin: 18px auto;
+    }
+
+    .photos img {
+        height: 140px;
+    }
+
+    .photos {
+        margin: 12px auto;
+    }
+
+    .hint {
+        margin-top: 14px;
+    }
+
+    .dots {
+        margin-top: 14px;
+    }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main
+    class="card"
+    id="card"
+    role="button"
+    tabindex="0"
+    aria-label="Congratulations card. Tap to reveal the next message."
+  >
+    <div class="content" id="content"></div>
+    <div class="dots" id="dots" aria-hidden="true"></div>
+  </main>
+
+  <script>
+    // Customize these three slides and use your own image paths.
+    const slides = [
+        {
+        eyebrow: "A little something for you",
+        title: "Open when ready.",
+        message: "There's something special waiting inside.",
+        images: [],
+        hint: "Tap anywhere to open"
+        },
+        {
+            eyebrow: "Congratulations!",
+            title: "6 Years of Kulfii blessing our lives",
+            message: "Never ceases to make everyone happy. Some might show it less than others, but in the end it's always all loveee",
+            images: [
+            "images/f4eb2a08-dedd-4d52-9bad-bc4c63e57862.jpeg",
+            "images/aa7b808c-2657-4a00-a642-65fb84f13863.jpeg",
+            "images/c1f9f23b-05ca-4e00-92a6-828842e648ab.jpeg"
+            ],
+            hint: "Three little memories"
+        },
+        {
+            eyebrow: "A little reminder",
+            title: "You two were made for each other and deserve nothing but the best",
+            message: "Special thanks to Kulfii for making our world a little brighter",
+            images: [
+            "images/2885f142-ed70-49a3-9a24-1a6a908c468f.jpeg",
+            "images/c2032d58-145c-4f60-96d1-3fab17579835.jpeg",
+            "images/d53321d2-b270-44a4-8cc8-47e7031c16f3.jpeg"
+            ],
+            hint: "Made with love and tiny paws "
+        }
+    ];
+
+    let currentSlide = 0;
+    let transitioning = false;
+
+    const card = document.getElementById("card");
+    const content = document.getElementById("content");
+    const dots = document.getElementById("dots");
+
+    function renderSlide() {
+      const slide = slides[currentSlide];
+
+        content.innerHTML = `
+        <div class="heart">${slide.final ? "♡" : "✧"}</div>
+        <div class="eyebrow">${slide.eyebrow}</div>
+        <h1>${slide.title}</h1>
+        <p class="message">${slide.message}</p>
+        
+
+        ${currentSlide === 0 ? `
+            <div class="envelope">
+            <div class="envelope-flap"></div>
+            <div class="envelope-seal">♡</div>
+            </div>
+        ` : `
+            <div class="photos">
+            ${slide.images.map((src, index) => `
+                <div class="photo-frame photo-frame-${index + 1}">
+                <img
+                    src="${src}"
+                    alt="A special memory"
+                    onerror="this.style.display='none'"
+                >
+                </div>
+            `).join("")}
+            </div>
+        `}
+
+        ${slide.final
+            ? `<div class="restart">↻ Read it again</div>`
+            : ""
+        }
+
+        <div class="hint">${slide.hint}</div>
+        `;
+
+        card.classList.toggle("dark-cover", currentSlide === 0);
+
+      dots.innerHTML = slides.map((_, i) => `
+        <span class="dot ${i === currentSlide ? "active" : ""}"></span>
+      `).join("");
+
+      card.setAttribute(
+        "aria-label",
+        `${slide.title} Slide ${currentSlide + 1} of ${slides.length}. Tap to ${
+          slide.final ? "start again" : "continue"
+        }.`
+      );
+    }
+
+    function nextSlide() {
+      if (transitioning) return;
+
+      transitioning = true;
+      content.classList.add("fade-out");
+
+      setTimeout(() => {
+        currentSlide = (currentSlide + 1) % slides.length;
+        renderSlide();
+        content.classList.remove("fade-out");
+        transitioning = false;
+      }, 250);
+    }
+
+    card.addEventListener("click", nextSlide);
+
+    card.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        nextSlide();
+      }
+    });
+
+    renderSlide();
+  </script>
+</body>
+</html>
